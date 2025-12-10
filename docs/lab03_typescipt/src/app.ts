@@ -82,5 +82,4 @@ function renderTable(elementId: string = "studentTableBody"): void {
   }
 };
 
-// เรียกใช้งานครั้งแรก
 renderTable("studentTableBody");
