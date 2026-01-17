@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ionic App</title>
+
+    <base href="/" />
+
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+
+    <!-- add to homescreen for ios -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Ionic App" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #e5e5e5;
+      }
+
+      /* กรอบจำลองหน้าจอมือถือ */
+      .mobile-frame {
+        width: 390px;   /* ใกล้เคียง iPhone 12/13 */
+        height: 844px;
+        margin: 20px auto;
+        background: #000;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,.3);
+        overflow: hidden;
+        display: flex;
+      }
+
+      #root {
+        flex: 1;
+        background: #fff;
+      }
+
+      /* ถ้าเปิดบนจอเล็ก (มือถือจริง) ให้เต็มจอเหมือนแอป */
+      @media (max-width: 420px) {
+        .mobile-frame {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mobile-frame">
+      <div id="root"></div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
