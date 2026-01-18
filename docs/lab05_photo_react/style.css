@@ -1,0 +1,168 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap");
+
+/* ===== Global ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background:
+    radial-gradient(900px 500px at 12% 18%, rgba(30, 144, 255, 0.28), transparent 55%),
+    radial-gradient(700px 420px at 88% 26%, rgba(0, 191, 255, 0.22), transparent 60%),
+    radial-gradient(500px 300px at 50% 90%, rgba(120, 80, 255, 0.18), transparent 65%),
+    linear-gradient(135deg, #0a0f14, #16232c, #000000);
+
+  color: #e5f0ff;
+}
+
+a {
+  color: #6fb6ff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Report Container ===== */
+.container.report {
+  max-width: 1000px;
+  margin: 48px auto;
+  padding: 46px 26px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(255,255,255,0.03);
+
+  animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Headings ===== */
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #b9dbff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 18px rgba(80, 160, 255, 0.35);
+}
+
+h4 {
+  margin-top: 30px;
+  margin-bottom: 14px;
+  border-left: 4px solid #4da3ff;
+  padding-left: 12px;
+  color: #c7e2ff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+p {
+  line-height: 1.75;
+  color: #d6e6ff;
+}
+
+hr {
+  border-color: rgba(255, 255, 255, 0.14);
+  opacity: 1;
+}
+
+/* ===== Screenshot Styling ===== */
+.row.g-3 img {
+  width: 100%;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.75);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.row.g-3 img:hover {
+  transform: scale(1.04);
+  filter: saturate(1.05);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.95);
+}
+
+/* ===== Force same image size ===== */
+.image-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== Button Style ===== */
+.btn.btn-primary {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 13px 26px;
+
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  color: #ffffff !important;
+  border: none !important;
+  background: linear-gradient(135deg, #1e90ff, #00c6ff) !important;
+
+  box-shadow:
+    0 0 18px rgba(30, 144, 255, 0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.25);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.btn.btn-primary:hover {
+  transform: translateY(-3px);
+  filter: saturate(1.08);
+  box-shadow:
+    0 0 30px rgba(30, 144, 255, 0.95),
+    inset 0 0 0 1px rgba(255,255,255,0.35);
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  margin-top: 52px;
+  font-size: 0.9rem;
+  color: #a8c6ff;
+  opacity: 0.85;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container.report {
+    margin: 18px auto;
+    padding: 28px 16px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+}
