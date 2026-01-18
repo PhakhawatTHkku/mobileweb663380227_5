@@ -1,7 +1,5 @@
 {
-  "name": "lab04-photo-vue",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "vue-vite"
+  "name": "lab04_photo_vue",
+  "integrations": {},
+  "type": "vue"
 }

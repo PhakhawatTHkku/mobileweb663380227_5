@@ -1,7 +1,5 @@
 {
   "name": "lab05_photo_react",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
+  "integrations": {},
+  "type": "react"
 }

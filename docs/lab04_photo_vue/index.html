@@ -1,59 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Ionic App</title>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lab04 Photo Vue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <base href="/" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
 
-    <meta name="color-scheme" content="light dark" />
-    <meta
-      name="viewport"
-      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    .app-frame {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: block;
+      background: #fff;
+    }
 
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background: #e5e5e5;
-      }
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      z-index: 10;
+      font-size: 14px;
+    }
 
-      /* จำลองกรอบมือถือ */
-      .mobile-frame {
-        width: 390px;          /* iPhone 12/13 */
-        height: 844px;
-        margin: 20px auto;
-        background: #000;
-        border-radius: 24px;
-        box-shadow: 0 20px 40px rgba(0,0,0,.3);
-        overflow: hidden;
-        display: flex;
-      }
+    .top-bar a {
+      color: #4da3ff;
+      text-decoration: none;
+      margin-left: auto;
+    }
 
-      #app {
-        flex: 1;
-        background: #fff;
-      }
+    .frame-wrapper {
+      padding-top: 44px;
+      height: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    Lab04 – Photo (Vue)
+    <a href="../index.html">← กลับหน้าหลัก</a>
+  </div>
 
-      @media (max-width: 420px) {
-        .mobile-frame {
-          width: 100%;
-          height: 100%;
-          margin: 0;
-          border-radius: 0;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="mobile-frame">
-      <div id="app"></div>
-    </div>
-
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-  
+  <div class="frame-wrapper">
+    <iframe
+      class="app-frame"
+      src="../../apps/lab04_photo_vue/index.html"
+    ></iframe>
+  </div>
+</body>
 </html>
