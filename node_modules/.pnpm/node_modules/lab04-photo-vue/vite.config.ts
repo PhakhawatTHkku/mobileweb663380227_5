@@ -7,14 +7,14 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    legacy()
-  ],
+  plugins: [vue(), legacy()],
+  base: './',
+  build: {
+    outDir: '../../docs/apps/lab04_photo_vue',
+    emptyOutDir: true
+  },
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    alias: { '@': path.resolve(__dirname, './src') },
   },
   test: {
     globals: true,

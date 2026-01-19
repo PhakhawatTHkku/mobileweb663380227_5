@@ -6,13 +6,11 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    legacy()
-  ],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
-  }
+  plugins: [react(), legacy()],
+  base: './',
+  build: {
+    outDir: '../../docs/apps/lab05_photo_react',
+    emptyOutDir: true
+  },
+  test: { globals: true, environment: 'jsdom', setupFiles: './src/setupTests.ts' }
 })
