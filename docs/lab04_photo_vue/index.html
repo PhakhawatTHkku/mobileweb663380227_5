@@ -1,102 +1,534 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lab 4 – Ionic Vue Photo Gallery</title>
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab04 Photo Vue - Neon Dark Red Theme</title>
     <style>
-      .app-preview {
-        margin: 30px auto 10px;
-        max-width: 390px;
-        aspect-ratio: 9 / 16;
-        border-radius: 28px;
-        overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: #000;
-        box-shadow:
-          0 0 0 6px rgba(255,255,255,0.06),
-          0 25px 60px rgba(0,0,0,0.85);
-      }
+        :root {
+            --neon-red: #FF1744;
+            --neon-red-light: #FF5252;
+            --dark-bg: #0a0a0a;
+            --dark-surface: #1a1a1a;
+            --dark-card: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+        }
 
-      .app-preview iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        display: block;
-        background: #fff;
-      }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
-      .app-hint {
-        text-align: center;
-        margin-top: 6px;
-        font-size: 0.9rem;
-        color: #9fbfff;
-        opacity: 0.85;
-      }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a0a0a 100%);
+            color: var(--text-primary);
+            overflow-y: auto;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-red-light);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+            border-bottom: 2px solid var(--neon-red);
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.3);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+            letter-spacing: 2px;
+        }
+
+        header h1 span {
+            color: var(--neon-red);
+            text-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Left section - Description */
+        .description-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, var(--dark-card) 0%, rgba(255, 23, 68, 0.05) 100%);
+            border: 2px solid var(--neon-red);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 
+                0 0 20px rgba(255, 23, 68, 0.2),
+                inset 0 0 20px rgba(255, 23, 68, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 23, 68, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover {
+            box-shadow: 
+                0 0 40px rgba(255, 23, 68, 0.4),
+                inset 0 0 40px rgba(255, 23, 68, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card h2 {
+            color: var(--neon-red);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px rgba(255, 23, 68, 0.4);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .features-list li {
+            color: var(--text-secondary);
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .features-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--neon-red);
+            text-shadow: 0 0 10px rgba(255, 23, 68, 0.6);
+            font-weight: bold;
+        }
+
+        /* Right section - App Preview */
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .phone-mockup {
+            background: linear-gradient(135deg, #000 0%, #1a0a0a 100%);
+            border: 3px solid var(--neon-red);
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 
+                0 0 40px rgba(255, 23, 68, 0.3),
+                inset 0 0 20px rgba(255, 23, 68, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+            border: 2px solid var(--neon-red);
+            border-top: none;
+        }
+
+        .phone-screen {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a0a0a 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .phone-screen::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 23, 68, 0.1) 50%, transparent 70%);
+            pointer-events: none;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .app-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, var(--neon-red-light), var(--neon-red));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 23, 68, 0.8);
+            }
+        }
+
+        .app-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--neon-red);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 23, 68, 0.5);
+        }
+
+        .app-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+
+        .app-features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.85em;
+        }
+
+        .feature-item {
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: var(--text-secondary);
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: 2px solid var(--neon-red);
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--neon-red);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-red);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 40px rgba(255, 23, 68, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 23, 68, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid var(--neon-red);
+            margin-top: 60px;
+            color: var(--text-secondary);
+            box-shadow: 0 -10px 30px rgba(255, 23, 68, 0.1);
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Tech stack */
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .tech-badge {
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(255, 23, 68, 0.3);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                padding: 30px 15px;
+                margin-bottom: 30px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Glow effect */
+        .glow {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 23, 68, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(255, 23, 68, 0.8);
+            }
+        }
     </style>
-  </head>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span>Lab04</span> Photo Vue</h1>
+            <p>โปรแกรมแสดงรูปภาพและจัดเก็บข้อมูล</p>
+        </header>
 
-  <body>
-    <div class="container report py-5">
-      <h1 class="mb-3">Lab 4: Ionic Vue Photo Gallery</h1>
+        <main>
+            <!-- Left Section - Description -->
+            <section class="description-section">
+                <div class="card">
+                    <h2>📱 เกี่ยวกับแอปพลิเคชัน</h2>
+                    <p>Lab04 Photo Vue เป็นแอปพลิเคชันสมาร์ตโฟนที่มีความสามารถในการถ่ายรูปภาพ จัดเก็บข้อมูล และแสดงรูปภาพได้อย่างมีประสิทธิภาพ</p>
+                    <p>สร้างด้วยเทคโนโลยีที่ทันสมัย เพื่อให้ประสบการณ์ผู้ใช้ที่ดีที่สุด</p>
+                </div>
 
-      <p><strong>ชื่อ:</strong> ภควรรธ บุญเรือง</p>
-      <p><strong>รหัสนักศึกษา:</strong> 663380227-5</p>
+                <div class="card">
+                    <h2>✨ คุณสมบัติหลัก</h2>
+                    <ul class="features-list">
+                        <li>ถ่ายรูปภาพจากกล้องอุปกรณ์</li>
+                        <li>บันทึกและจัดเก็บรูปภาพในหน่วยความจำ</li>
+                        <li>แสดงรูปภาพที่บันทึกไว้</li>
+                        <li>ตัดสินใจและแก้ไขรูปภาพ</li>
+                        <li>ส่วนติดต่อผู้ใช้ที่ทันสมัยและใช้งานง่าย</li>
+                    </ul>
+                </div>
 
-      <hr />
+                <div class="card">
+                    <h2>🛠️ เทคโนโลยีที่ใช้</h2>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Vue 3</span>
+                        <span class="tech-badge">TypeScript</span>
+                        <span class="tech-badge">Ionic</span>
+                        <span class="tech-badge">Capacitor</span>
+                        <span class="tech-badge">Vite</span>
+                    </div>
+                </div>
 
-      <h4>คำอธิบายแอป</h4>
-      <p>
-        แอปพลิเคชัน Photo Gallery พัฒนาด้วย Ionic Framework ร่วมกับ Vue.js
-        ใช้งาน Capacitor Camera และ Filesystem
-        สามารถถ่ายภาพจากกล้อง บันทึกลงเครื่อง และแสดงผลเป็น Grid
-        ในรูปแบบแอปพลิเคชันมือถือ
-      </p>
+                <div class="action-buttons">
+                    <a href="../" class="btn btn-primary">← กลับไปหน้าหลัก</a>
+                    <a href="assets/" class="btn btn-secondary">ดูไฟล์ Build →</a>
+                </div>
+            </section>
 
-      <h4 class="mt-4">Live App Preview</h4>
+            <!-- Right Section - App Preview -->
+            <section class="preview-section">
+                <div class="card">
+                    <h2>📲 ตัวอย่างแอป</h2>
+                </div>
 
-      <div class="app-preview">
-        <iframe src="../apps/lab04_photo_vue/index.html"></iframe>
-      </div>
-      <div class="app-hint">
-        * ตัวอย่างการทำงานของแอปจากโฟลเดอร์ apps
-      </div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="app-content">
+                            <div class="app-logo">📷</div>
+                            <div class="app-title">Photo Vue</div>
+                            <div class="app-subtitle">v0.0.1</div>
+                            <div class="app-features">
+                                <div class="feature-item">📸 ถ่ายรูป</div>
+                                <div class="feature-item">💾 จัดเก็บ</div>
+                                <div class="feature-item">🖼️ แสดง</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-      <h4 class="mt-5">Screenshot</h4>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <div class="image-box">
-            <img src="images/test1.png" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="image-box">
-            <img src="images/test2.png" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="image-box">
-            <img src="images/test3.png" />
-          </div>
-        </div>
-      </div>
+                <div class="card">
+                    <h2>🎯 วัตถุประสงค์</h2>
+                    <p>โครงการนี้มีวัตถุประสงค์เพื่อสาธิตการใช้งาน:</p>
+                    <ul class="features-list">
+                        <li>Capacitor สำหรับการเข้าถึงกล้อง</li>
+                        <li>File System API สำหรับการจัดเก็บไฟล์</li>
+                        <li>Vue Router สำหรับการนำทาง</li>
+                        <li>Ionic Components สำหรับ UI/UX</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
 
-      <h4 class="mt-5">Download APK</h4>
-      <a href="app-release.apk" class="btn btn-primary" download>
-        ดาวน์โหลดไฟล์ APK
-      </a>
-
-      <div class="footer">
-        © 2026 Mobile Web Application Development — Lab 4
-      </div>
+        <footer>
+            <p>🌟 Lab04 Photo Vue - Mobile Web Development</p>
+            <p>Built with 💖 using Vue 3, TypeScript & Ionic Framework</p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">© 2026 | Neon Dark Red Theme Edition</p>
+        </footer>
     </div>
-  </body>
+</body>
 </html>
