@@ -5,7 +5,19 @@ import TabsPage from '../views/TabsPage.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/tab1'
+    redirect: '/expense-list'
+  },
+  {
+    path: '/expense-list',
+    component: () => import('@/views/ExpenseList.vue')
+  },
+  {
+    path: '/add-expense',
+    component: () => import('@/views/AddExpense.vue')
+  },
+  {
+    path: '/edit-expense/:id',
+    component: () => import('@/views/EditExpense.vue')
   },
   {
     path: '/tabs/',
