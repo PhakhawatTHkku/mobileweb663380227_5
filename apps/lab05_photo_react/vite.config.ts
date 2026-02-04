@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [react(), legacy()],
   base: './',
   build: {
-    outDir: '../../docs/apps/lab05_photo_react',
+    outDir: 'dist',
     emptyOutDir: true
   },
   test: { globals: true, environment: 'jsdom', setupFiles: './src/setupTests.ts' }
