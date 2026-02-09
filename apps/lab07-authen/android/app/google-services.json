@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460009144120",
+    "project_id": "mobileappautehn2568",
+    "storage_bucket": "mobileappautehn2568.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460009144120:android:f14465c272c26702a84bcd",
+        "android_client_info": {
+          "package_name": "com.mobile.auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyU2z6Z_EWzw2m9B6vdwIfb9Qyv5tIQI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

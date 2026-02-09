@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lab07 Authentication - Neon Dark Red Theme</title>
+	<style>
+		* { margin:0; padding:0; box-sizing:border-box }
+
+		:root {
+			--neon-red: #FF1744;
+			--neon-red-light: #FF5983;
+			--dark-bg: #0a0e27;
+			--dark-surface: #0f1435;
+			--dark-card: #1a1f3a;
+			--text-primary: #ffffff;
+			--text-secondary: #b0b0d0;
+		}
+
+		html,body { width:100%; height:100% }
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-surface) 50%, #1a0f2e 100%);
+			color: var(--text-primary);
+			-webkit-font-smoothing:antialiased;
+			-moz-osx-font-smoothing:grayscale;
+			overflow-y:auto;
+		}
+
+		::-webkit-scrollbar { width:8px }
+		::-webkit-scrollbar-track { background:var(--dark-bg) }
+		::-webkit-scrollbar-thumb { background:var(--neon-red); border-radius:4px }
+		::-webkit-scrollbar-thumb:hover { background:var(--neon-red-light) }
+
+		.container {
+			max-width:1200px; margin:0 auto; padding:20px; display:flex; flex-direction:column; min-height:100vh;
+		}
+
+		header { text-align:center; padding:36px 20px; border-bottom:2px solid var(--neon-red); box-shadow:0 0 20px rgba(255,23,68,0.18); margin-bottom:36px }
+		header h1 { font-size:2.6em; font-weight:700; margin-bottom:8px; background: linear-gradient(135deg, #ffffff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow:0 0 24px rgba(255,23,68,0.45) }
+		header h1 span { color:var(--neon-red); text-shadow:0 0 20px rgba(255,23,68,0.8) }
+		header p { color:var(--text-secondary); font-size:1.05em }
+
+		main { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start }
+
+		.card {
+			background: linear-gradient(135deg, var(--dark-card) 0%, rgba(255,23,68,0.03) 100%);
+			border:2px solid var(--neon-red);
+			border-radius:12px; padding:22px; box-shadow: 0 0 20px rgba(255,23,68,0.16), inset 0 0 10px rgba(255,23,68,0.03);
+			transition: all 0.3s ease;
+		}
+
+		.card:hover {
+			box-shadow: 0 0 40px rgba(255,23,68,0.3), inset 0 0 20px rgba(255,23,68,0.08);
+			transform: translateY(-3px);
+		}
+
+		.card h2 { 
+			background: linear-gradient(135deg, var(--neon-red), var(--neon-red-light));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin-bottom:12px; 
+			font-size:1.3em; 
+			text-shadow:0 0 12px rgba(255,23,68,0.35);
+			display: inline-block;
+		}
+		.card p { color:var(--text-secondary); line-height:1.6 }
+
+		.features-list { list-style:none; margin-top:12px }
+		.features-list li { color:var(--text-secondary); padding:8px 0; padding-left:22px; position:relative }
+		.features-list li::before { content:'▸'; position:absolute; left:0; color:var(--neon-red); font-weight:700; text-shadow:0 0 8px rgba(255,23,68,0.5) }
+
+		.preview-section { display:flex; flex-direction:column; gap:18px }
+
+		.phone-mockup { 
+			background: linear-gradient(135deg,#000 0%, #160909 100%); 
+			border:3px solid var(--neon-red); 
+			border-radius:40px; 
+			padding:12px; 
+			box-shadow:0 0 36px rgba(255,23,68,0.22); 
+			position:relative; 
+			overflow:hidden;
+			display: flex;
+			justify-content: center;
+		}
+		.phone-mockup::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 150px;
+			height: 25px;
+			background: #000;
+			border-radius: 0 0 20px 20px;
+			z-index: 10;
+			border: 2px solid var(--neon-red);
+			border-top: none;
+		}
+
+		.phone-screen { 
+			width:360px; 
+			max-width: 100%;
+			aspect-ratio:9/16; 
+			border-radius:30px; 
+			background:linear-gradient(135deg, var(--dark-bg) 0%, #1a0a0a 100%); 
+			overflow:hidden; 
+			display:flex; 
+			align-items:center; 
+			justify-content:center;
+			position: relative;
+		}
+
+		.phone-screen::after {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: 
+				linear-gradient(45deg, transparent 30%, rgba(255, 23, 68, 0.1) 50%, transparent 70%);
+			pointer-events: none;
+			animation: shine 3s infinite;
+		}
+
+		@keyframes shine {
+			0% { transform: translateX(-100%); }
+			100% { transform: translateX(100%); }
+		}
+
+		.app-content {
+			position: relative;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 40px 20px;
+			text-align: center;
+		}
+
+		.app-logo { 
+			width:72px; 
+			height:72px; 
+			background:linear-gradient(135deg, var(--neon-red), var(--neon-red-light)); 
+			border-radius:18px; 
+			display:flex; 
+			align-items:center; 
+			justify-content:center; 
+			font-size:2em; 
+			margin-bottom:12px; 
+			box-shadow:0 0 26px rgba(255,23,68,0.45);
+			animation: pulse 2s infinite;
+		}
+
+		@keyframes pulse {
+			0%, 100% {
+				box-shadow: 0 0 26px rgba(255,23,68,0.45);
+			}
+			50% {
+				box-shadow: 0 0 50px rgba(255,23,68,0.8);
+			}
+		}
+
+		.app-title { 
+			font-weight:700; 
+			background: linear-gradient(135deg, #ffffff, var(--neon-red));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			margin-top:8px;
+			font-size: 1.3em;
+		}
+		.app-subtitle { color:var(--text-secondary); margin-top:8px }
+
+		.action-buttons { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap }
+		.btn { 
+			padding:12px 22px; 
+			border:2px solid var(--neon-red); 
+			border-radius:8px; 
+			font-weight:700; 
+			text-decoration:none; 
+			color:var(--neon-red); 
+			background:transparent;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: inline-block;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+		
+		.btn-primary { 
+			background:var(--neon-red); 
+			color:#000;
+			box-shadow: 0 0 20px rgba(255, 23, 68, 0.4);
+		}
+		
+		.btn-secondary { 
+			background:transparent; 
+			color:var(--neon-red);
+			box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
+		}
+
+		.btn:hover {
+			box-shadow: 0 0 40px rgba(255,23,68,0.6);
+			transform: translateY(-2px);
+		}
+
+		.btn-secondary:hover {
+			background: rgba(255, 23, 68, 0.1);
+		}
+
+		.tech-stack {
+			display:flex;
+			gap:10px;
+			flex-wrap:wrap;
+			margin-top:8px;
+		}
+
+		.tech-badge {
+			background:rgba(255,23,68,0.08);
+			border:1px solid var(--neon-red);
+			color:var(--neon-red);
+			padding:6px 10px;
+			border-radius:16px;
+			font-weight:700;
+			font-size: 0.9em;
+		}
+
+		.auth-flow {
+			display:grid;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+			gap:12px;
+			margin-top:12px;
+		}
+
+		.flow-item {
+			background:rgba(255,23,68,0.1);
+			border:1px solid var(--neon-red);
+			border-radius:8px;
+			padding:12px;
+			text-align:center;
+			color:var(--neon-red);
+			font-weight:600;
+		}
+
+		footer { 
+			text-align:center; 
+			padding:28px 20px; 
+			border-top:2px solid var(--neon-red); 
+			margin-top:48px; 
+			color:var(--text-secondary);
+			box-shadow: 0 -10px 30px rgba(255, 23, 68, 0.1);
+		}
+
+		footer p { margin: 5px 0 }
+
+		@media (max-width: 880px) { 
+			main { grid-template-columns:1fr } 
+			header h1 { font-size:2em }
+			.phone-screen {
+				width: 100%;
+				max-width: 360px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1><span>Lab07</span> Authentication System</h1>
+			<p>ระบบอนุญาต ด้วย Vue 3, Ionic, Firebase Authentication และ Auth Guard</p>
+		</header>
+
+		<main>
+			<!-- Left - Description -->
+			<section>
+				<div class="card">
+					<h2>🔐 เกี่ยวกับแอปพลิเคชัน</h2>
+					<p>Lab07 Authentication System เป็นแอปที่นำเสนอระบบการอนุญาต (Authentication) ที่สมบูรณ์พร้อม Auth Guard สำหรับการปกป้องเส้นทาง ผู้ใช้สามารถลงชื่อเข้าระบบผ่าน Email, Google หรือ Phone Number โดยมีการจัดการเซสชันแบบอัตโนมัติ</p>
+				</div>
+
+				<div class="card" style="margin-top:16px">
+					<h2>✨ คุณสมบัติหลัก</h2>
+					<ul class="features-list">
+						<li>ลงชื่อเข้าระบบ 3 วิธี (Email, Google, Phone)</li>
+						<li>Auth Guard ป้องกันเส้นทางที่ต้องการการตรวจสอบสิทธิ์</li>
+						<li>การแสดงข้อมูลผู้ใช้ (UID, Email, Phone, Display Name)</li>
+						<li>Redirect อัตโนมัติเมื่อเข้าสู่ระบบแล้ว</li>
+						<li>Logout และล้างเซสชัน</li>
+						<li>ตรวจสอบสถานะการเข้าสู่ระบบก่อนเข้าหน้า</li>
+						<li>ออกแบบ UI/UX สมัยใหม่แบบ Neon Dark</li>
+					</ul>
+				</div>
+
+				<div class="card" style="margin-top:16px">
+					<h2>🛠️ เทคโนโลยีที่ใช้</h2>
+					<div class="tech-stack">
+						<span class="tech-badge">Vue 3</span>
+						<span class="tech-badge">TypeScript</span>
+						<span class="tech-badge">Ionic Vue</span>
+						<span class="tech-badge">Vue Router</span>
+						<span class="tech-badge">Firebase Auth</span>
+						<span class="tech-badge">Vite</span>
+						<span class="tech-badge">Composition API</span>
+					</div>
+				</div>
+
+				<div class="action-buttons" style="margin-top:18px">
+					<a href="../" class="btn btn-primary">← กลับไปหน้าหลัก</a>
+					<a href="../../apps/lab07-authen" class="btn btn-secondary">Open Source →</a>
+				</div>
+			</section>
+
+			<!-- Right - Preview -->
+			<section class="preview-section">
+				<div class="card">
+					<h2>📲 ตัวอย่างแอป</h2>
+					<p style="color:var(--text-secondary);margin-top:8px">ดูตัวอย่างหน้าลงชื่อเข้าระบบของแอป Authentication System ภายใน mockup</p>
+				</div>
+
+				<div class="phone-mockup">
+					<div class="phone-screen">
+						<div class="app-content">
+							<div class="app-logo">🔐</div>
+							<div class="app-title">Auth System</div>
+							<div class="app-subtitle">v1.0.0</div>
+							<div style="margin-top:20px; width:100%; max-width:160px; display:flex; flex-direction:column; gap:8px">
+								<div style="background:rgba(255,23,68,0.15); padding:10px; border-radius:6px; color:var(--neon-red); font-size:0.85em; border:1px solid var(--neon-red); font-weight:600">📧 Email Login</div>
+								<div style="background:rgba(255,23,68,0.15); padding:10px; border-radius:6px; color:var(--neon-red); font-size:0.85em; border:1px solid var(--neon-red); font-weight:600">🔴 Google Login</div>
+								<div style="background:rgba(255,23,68,0.15); padding:10px; border-radius:6px; color:var(--neon-red); font-size:0.85em; border:1px solid var(--neon-red); font-weight:600">📱 Phone Login</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<h2>🎯 ลำดับการทำงาน</h2>
+					<div class="auth-flow">
+						<div class="flow-item">1️⃣ Login Page</div>
+						<div class="flow-item">2️⃣ Authenticate</div>
+						<div class="flow-item">3️⃣ Profile View</div>
+						<div class="flow-item">4️⃣ Protected Route</div>
+						<div class="flow-item">5️⃣ Show User Info</div>
+						<div class="flow-item">6️⃣ Logout</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<h2>🔒 Auth Guard Logic</h2>
+					<ul class="features-list">
+						<li><strong>beforeEach:</strong> ตรวจสอบแต่ละการนำทาง</li>
+						<li><strong>requiresAuth:</strong> ตรวจสอบสิทธิ์จำเป็น</li>
+						<li><strong>getCurrentUser:</strong> ดึงข้อมูลผู้ใช้ปัจจุบัน</li>
+						<li><strong>Redirect Logic:</strong> นำทางอัตโนมัติ</li>
+					</ul>
+				</div>
+
+				<div class="card">
+					<h2>👤 ข้อมูลผู้ใช้</h2>
+					<ul class="features-list">
+						<li><strong>UID:</strong> รหัสผู้ใช้ที่ไม่ซ้ำกัน</li>
+						<li><strong>Email:</strong> ที่อยู่อีเมล (ถ้ามี)</li>
+						<li><strong>Phone:</strong> เบอร์โทรศัพท์ (ถ้ามี)</li>
+						<li><strong>Display Name:</strong> ชื่อแสดง</li>
+						<li><strong>Photo URL:</strong> รูปโปรไฟล์</li>
+					</ul>
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<p>🌟 Lab07 Authentication System - Mobile Web Development</p>
+			<p>Built with 💖 using Vue 3, TypeScript, Ionic & Firebase Authentication</p>
+			<p style="margin-top:16px; font-size:0.9em; opacity:0.75">© 2026 | Neon Dark Red Theme Edition</p>
+		</footer>
+	</div>
+</body>
+</html>
