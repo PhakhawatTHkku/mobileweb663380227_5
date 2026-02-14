@@ -11,7 +11,7 @@
             <p>Sign in to continue</p>
           </div>
 
-          <div class="login-options">
+          <div class="login-options" v-if="!showEmailForm && !showPhoneForm">
             <ion-button 
               expand="block" 
               size="large" 
@@ -40,6 +40,43 @@
             </ion-button>
           </div>
 
+          <div v-if="showEmailForm" class="login-form">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input v-model="email" type="email" placeholder="Enter your email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input v-model="password" type="password" placeholder="Enter your password"></ion-input>
+            </ion-item>
+            <ion-button expand="block" @click="doEmailLogin" :disabled="!email || !password">Login</ion-button>
+            <ion-button expand="block" fill="clear" @click="cancelEmailForm">Cancel</ion-button>
+          </div>
+
+          <div v-if="showPhoneForm" class="login-form">
+            <div v-if="phoneStep === 'input'">
+              <ion-item>
+                <ion-label position="floating">Phone Number</ion-label>
+                <ion-input v-model="phone" type="tel" placeholder="+66812345678"></ion-input>
+              </ion-item>
+              <ion-button expand="block" @click="doStartPhoneLogin" :disabled="!phone">Send Code</ion-button>
+            </div>
+            <div v-if="phoneStep === 'verify'">
+              <ion-item>
+                <ion-label position="floating">Verification Code</ion-label>
+                <ion-input v-model="verificationCode" type="text" placeholder="Enter 6-digit code"></ion-input>
+              </ion-item>
+              <ion-button expand="block" @click="doVerifyPhone" :disabled="!verificationCode">Verify</ion-button>
+            </div>
+            <ion-button expand="block" fill="clear" @click="cancelPhoneForm">Cancel</ion-button>
+          </div>
+
+          <div id="recaptcha-container"></div>
+
+          <div v-if="statusMessage" :class="['status-message', `status-${statusType}`]">
+            <strong>{{ statusType === 'success' ? '✓' : statusType === 'error' ? '✕' : 'ℹ' }}</strong> {{ statusMessage }}
+          </div>
+
           <div class="terms-text">
             <p>By signing in, you agree to our<br/><strong>Terms of Service</strong> and <strong>Privacy Policy</strong></p>
           </div>
@@ -56,13 +93,36 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonContent, IonButton, IonIcon, useIonRouter } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonIcon, IonItem, IonLabel, IonInput, useIonRouter } from '@ionic/vue';
 import { lockClosedOutline, mailOutline, logoGoogle, callOutline } from 'ionicons/icons';
 import { ref, onMounted } from 'vue';
 import { authService } from '@/auth/auth-service';
 
 const router = useIonRouter();
 const isLoading = ref(true);
+
+const email = ref('')
+const password = ref('')
+const showEmailForm = ref(false)
+const showPhoneForm = ref(false)
+const phone = ref('')
+const verificationCode = ref('')
+const verificationId = ref('')
+const phoneStep = ref('input')
+const statusMessage = ref('')
+const statusType = ref<'success' | 'error' | 'info' | ''>('')
+
+const clearStatus = () => {
+  statusMessage.value = ''
+  statusType.value = ''
+}
+
+const showStatus = (message: string, type: 'success' | 'error' | 'info') => {
+  statusMessage.value = message
+  statusType.value = type
+  console.log(`[${type.toUpperCase()}] ${message}`)
+  setTimeout(clearStatus, 5000)
+}
 
 onMounted(async () => {
   try {
@@ -77,45 +137,109 @@ onMounted(async () => {
   }
 });
 
-const loginWithEmail = async () => {
+const loginWithEmail = () => {
+  showEmailForm.value = true
+}
+
+const doEmailLogin = async () => {
+  if (!email.value || !password.value) return
   try {
-    console.log('Email login clicked');
-    router.push('/tabs/tab1');
-  } catch (error) {
-    console.error('Email login error:', error);
+    showStatus('Logging in with email...', 'info')
+    await authService.loginWithEmailPassword({email: email.value, password: password.value})
+    showStatus('Login successful! Redirecting...', 'success')
+    setTimeout(() => router.push('/tabs/tab1'), 1000)
+  } catch (error: any) {
+    const message = error?.message || 'Email login failed'
+    if (message.includes('user-not-found') || message.includes('auth/user-not-found')) {
+      showStatus('Account not found!', 'error')
+    } else if (message.includes('wrong-password') || message.includes('auth/wrong-password')) {
+      showStatus('Wrong password!', 'error')
+    } else {
+      showStatus(`Login failed: ${message}`, 'error')
+    }
+    console.error('Email login error:', error)
   }
-};
+}
 
 const loginWithGoogle = async () => {
   try {
-    console.log('Google login clicked');
-    router.push('/tabs/tab1');
-  } catch (error) {
-    console.error('Google login error:', error);
+    showStatus('Logging in with Google...', 'info')
+    await authService.loginWithGoogle()
+    showStatus('Login successful! Redirecting...', 'success')
+    setTimeout(() => router.push('/tabs/tab1'), 1000)
+  } catch (error: any) {
+    showStatus('Google login failed!', 'error')
+    console.error('Google login error:', error)
   }
-};
+}
 
-const loginWithPhone = async () => {
+const loginWithPhone = () => {
+  showPhoneForm.value = true
+  phoneStep.value = 'input'
+}
+
+const doStartPhoneLogin = async () => {
+  if (!phone.value) return
   try {
-    console.log('Phone login clicked');
-    router.push('/tabs/tab1');
-  } catch (error) {
-    console.error('Phone login error:', error);
+    showStatus('Sending verification code...', 'info')
+    const result = await authService.startPhoneLogin({phoneNumberE164: phone.value})
+    verificationId.value = result.verificationId
+    phoneStep.value = 'verify'
+    showStatus('Code sent! Check your SMS.', 'success')
+  } catch (error: any) {
+    const message = error?.message || 'Failed to send code'
+    if (message.includes('invalid') || message.includes('country')) {
+      showStatus('Invalid phone number!', 'error')
+    } else {
+      showStatus(`Failed to send code: ${message}`, 'error')
+    }
+    console.error('Phone login start error:', error)
   }
-};
+}
+
+const doVerifyPhone = async () => {
+  if (!verificationCode.value) return
+  try {
+    showStatus('Verifying code...', 'info')
+    await authService.confirmPhoneCode({verificationId: verificationId.value, verificationCode: verificationCode.value})
+    showStatus('Login successful! Redirecting...', 'success')
+    setTimeout(() => router.push('/tabs/tab1'), 1000)
+  } catch (error: any) {
+    const message = error?.message || 'Verification failed'
+    if (message.includes('invalid') || message.includes('expired')) {
+      showStatus('Invalid or expired code!', 'error')
+    } else {
+      showStatus(`Verification failed: ${message}`, 'error')
+    }
+    console.error('Phone verify error:', error)
+  }
+}
+
+const cancelEmailForm = () => {
+  showEmailForm.value = false
+  email.value = ''
+  password.value = ''
+}
+
+const cancelPhoneForm = () => {
+  showPhoneForm.value = false
+  phone.value = ''
+  verificationCode.value = ''
+  phoneStep.value = 'input'
+}
 </script>
 
 <style scoped>
 :root {
-  --neon-red: #FF1744;
-  --neon-red-light: #FF5983;
-  --dark-bg: #0a0e27;
-  --dark-card: #1a1f3a;
-  --dark-text: #ffffff;
+  --primary-blue: #007bff;
+  --primary-blue-light: #0056b3;
+  --light-bg: #ffffff;
+  --light-card: #f8f9fa;
+  --dark-text: #000000;
 }
 
 .login-page ::v-deep {
-  --ion-background-color: var(--dark-bg);
+  --ion-background-color: var(--light-bg);
   --ion-text-color: var(--dark-text);
 }
 
@@ -126,7 +250,7 @@ const loginWithPhone = async () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1435 50%, #1a0f2e 100%);
+  background: linear-gradient(135deg, var(--light-bg) 0%, #f0f0f0 50%, #e0e0e0 100%);
   overflow: hidden;
 }
 
@@ -142,6 +266,56 @@ const loginWithPhone = async () => {
   min-height: 100vh;
 }
 
+.login-form {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--light-card);
+  border-radius: 12px;
+  border: 1px solid var(--primary-blue);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-message {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+.status-success {
+  background: #d4edda;
+  border-left-color: #28a745;
+  color: #155724;
+}
+
+.status-error {
+  background: #f8d7da;
+  border-left-color: #dc3545;
+  color: #721c24;
+}
+
+.status-info {
+  background: #d1ecf1;
+  border-left-color: #17a2b8;
+  color: #0c5460;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .logo-section {
   text-align: center;
   margin-top: 4rem;
@@ -152,12 +326,12 @@ const loginWithPhone = async () => {
   width: 120px;
   height: 120px;
   margin: 0 auto 2rem;
-  background: linear-gradient(135deg, var(--neon-red), var(--neon-red-light));
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 30px rgba(255, 23, 68, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -170,7 +344,7 @@ const loginWithPhone = async () => {
   font-size: 2.5rem;
   margin: 1rem 0 0.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #ffffff, var(--neon-red));
+  background: linear-gradient(135deg, #000000, var(--primary-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -221,46 +395,46 @@ const loginWithPhone = async () => {
 }
 
 .email-button {
-  background: linear-gradient(135deg, var(--neon-red), var(--neon-red-light));
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
   color: white;
-  box-shadow: 0 0 20px rgba(255, 23, 68, 0.4);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .email-button:hover {
-  box-shadow: 0 0 30px rgba(255, 23, 68, 0.7);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transform: translateY(-2px);
 }
 
 .google-button {
-  background: linear-gradient(135deg, #1a1f3a, #252d52);
-  color: white;
-  border: 2px solid var(--neon-red);
-  box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #000000;
+  border: 2px solid var(--primary-blue);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .google-button:hover {
-  background: linear-gradient(135deg, #252d52, #2a3560);
-  box-shadow: 0 0 25px rgba(255, 23, 68, 0.6);
+  background: linear-gradient(135deg, #e9ecef, #dee2e6);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transform: translateY(-2px);
 }
 
 .phone-button {
-  background: linear-gradient(135deg, #1a1f3a, #252d52);
-  color: white;
-  border: 2px solid var(--neon-red-light);
-  box-shadow: 0 0 15px rgba(255, 89, 131, 0.3);
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #000000;
+  border: 2px solid var(--primary-blue);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .phone-button:hover {
-  background: linear-gradient(135deg, #252d52, #2a3560);
-  box-shadow: 0 0 25px rgba(255, 89, 131, 0.6);
+  background: linear-gradient(135deg, #e9ecef, #dee2e6);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transform: translateY(-2px);
 }
 
 .terms-text {
   text-align: center;
   font-size: 0.85rem;
-  color: #8a8aad;
+  color: #666666;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -270,7 +444,7 @@ const loginWithPhone = async () => {
 }
 
 .terms-text strong {
-  color: var(--neon-red);
+  color: var(--primary-blue);
   font-weight: 600;
 }
 
@@ -287,7 +461,7 @@ const loginWithPhone = async () => {
 .decoration {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.1;
+  opacity: 0.05;
   filter: blur(40px);
 }
 
@@ -331,11 +505,11 @@ const loginWithPhone = async () => {
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 0 30px rgba(255, 23, 68, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 23, 68, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     transform: scale(1.02);
   }
 }
@@ -351,13 +525,5 @@ const loginWithPhone = async () => {
 
 ion-icon {
   margin-right: 8px;
-}
-</style>
-  margin-top: 1rem;
-}
-
-.terms-text p {
-  margin: 0;
-  line-height: 1.4;
 }
 </style>

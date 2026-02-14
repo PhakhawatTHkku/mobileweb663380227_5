@@ -38,30 +38,30 @@ import { imageOutline } from 'ionicons/icons';
 
 <style scoped>
 :root {
-  --neon-red: #FF1744;
-  --neon-red-light: #FF5983;
-  --dark-bg: #0a0e27;
-  --dark-card: #1a1f3a;
-  --dark-text: #ffffff;
+  --primary-blue: #007bff;
+  --primary-blue-light: #0056b3;
+  --light-bg: #ffffff;
+  --light-card: #f8f9fa;
+  --dark-text: #000000;
 }
 
 .tab-page ::v-deep {
-  --ion-background-color: var(--dark-bg);
+  --ion-background-color: var(--light-bg);
   --ion-text-color: var(--dark-text);
 }
 
 .header-neon {
-  --ion-toolbar-background: linear-gradient(135deg, var(--dark-card) 0%, #1a1f3a 100%);
+  --ion-toolbar-background: linear-gradient(135deg, var(--light-card) 0%, #e9ecef 100%);
 }
 
 .toolbar-neon {
-  --ion-toolbar-color: white;
-  border-bottom: 2px solid var(--neon-red);
-  box-shadow: 0 2px 15px rgba(255, 23, 68, 0.2);
+  --ion-toolbar-color: black;
+  border-bottom: 2px solid var(--primary-blue);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 ion-content {
-  background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1435 50%, #1a0f2e 100%);
+  background: linear-gradient(135deg, var(--light-bg) 0%, #f0f0f0 50%, #e0e0e0 100%);
 }
 
 .tab-container {
@@ -75,9 +75,9 @@ ion-content {
 .section-header h2 {
   font-size: 2rem;
   margin: 0 0 0.5rem 0;
-  color: white;
+  color: black;
   font-weight: 700;
-  background: linear-gradient(135deg, #ffffff, var(--neon-red));
+  background: linear-gradient(135deg, #000000, var(--primary-blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -86,9 +86,9 @@ ion-content {
 .neon-line {
   width: 80px;
   height: 3px;
-  background: linear-gradient(90deg, var(--neon-red), var(--neon-red-light));
+  background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-light));
   border-radius: 2px;
-  box-shadow: 0 0 10px rgba(255, 23, 68, 0.6);
+  box-shadow: 0 0 10px rgba(0,123,255,0.3);
 }
 
 .content-grid {
@@ -98,36 +98,36 @@ ion-content {
 }
 
 .content-card {
-  background: linear-gradient(135deg, var(--dark-card), #252d52);
+  background: linear-gradient(135deg, var(--light-card), #e9ecef);
   border-radius: 12px;
   padding: 1rem;
-  border: 2px solid var(--neon-red);
+  border: 2px solid var(--primary-blue);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .content-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 10px 30px rgba(255, 23, 68, 0.3);
-  border-color: var(--neon-red-light);
+  box-shadow: 0 10px 30px rgba(0,123,255,0.1);
+  border-color: var(--primary-blue-light);
 }
 
 .card-placeholder {
   width: 100%;
   aspect-ratio: 1;
-  background: rgba(255, 23, 68, 0.1);
+  background: rgba(0,123,255,0.1);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
-  color: var(--neon-red);
+  color: var(--primary-blue);
 }
 
 .card-label {
   text-align: center;
-  color: #b0b0d0;
+  color: #666666;
   font-weight: 500;
   font-size: 0.9rem;
 }
