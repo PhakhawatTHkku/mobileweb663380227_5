@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab08 Gemini Vision AI - Neon Dark Red Theme</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --neon-red:#FF1744;
+  --neon-red-light:#FF5983;
+  --dark-bg:#0a0e27;
+  --dark-surface:#0f1435;
+  --dark-card:#1a1f3a;
+  --text-primary:#ffffff;
+  --text-secondary:#b0b0d0;
+}
+
+body{
+  font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
+  background:linear-gradient(135deg,var(--dark-bg) 0%,var(--dark-surface) 50%,#1a0f2e 100%);
+  color:var(--text-primary);
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+header{
+  text-align:center;
+  padding:40px 20px;
+  border-bottom:2px solid var(--neon-red);
+  box-shadow:0 0 30px rgba(255,23,68,0.2);
+  margin-bottom:40px;
+}
+
+header h1{
+  font-size:2.6em;
+  background:linear-gradient(135deg,#fff,var(--neon-red));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 25px rgba(255,23,68,0.5);
+}
+
+header p{
+  color:var(--text-secondary);
+  margin-top:10px;
+}
+
+main{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+}
+
+.card{
+  background:linear-gradient(135deg,var(--dark-card),rgba(255,23,68,0.05));
+  border:2px solid var(--neon-red);
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 0 25px rgba(255,23,68,0.2);
+  transition:0.3s;
+}
+
+.card:hover{
+  box-shadow:0 0 45px rgba(255,23,68,0.5);
+  transform:translateY(-4px);
+}
+
+.card h2{
+  color:var(--neon-red);
+  margin-bottom:14px;
+  text-shadow:0 0 15px rgba(255,23,68,0.5);
+}
+
+.features-list{
+  list-style:none;
+  margin-top:10px;
+}
+
+.features-list li{
+  padding:8px 0;
+  padding-left:20px;
+  position:relative;
+  color:var(--text-secondary);
+}
+
+.features-list li::before{
+  content:"▸";
+  position:absolute;
+  left:0;
+  color:var(--neon-red);
+}
+
+.tech-stack{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+
+.tech-badge{
+  border:1px solid var(--neon-red);
+  padding:6px 12px;
+  border-radius:16px;
+  color:var(--neon-red);
+  font-weight:600;
+  font-size:0.9em;
+}
+
+.phone-mockup{
+  background:#000;
+  border:3px solid var(--neon-red);
+  border-radius:40px;
+  padding:15px;
+  box-shadow:0 0 40px rgba(255,23,68,0.3);
+  display:flex;
+  justify-content:center;
+}
+
+.phone-screen{
+  width:340px;
+  aspect-ratio:9/16;
+  border-radius:30px;
+  background:linear-gradient(135deg,#0d0d0d,#1a0a0a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+
+.app-logo{
+  width:80px;
+  height:80px;
+  background:linear-gradient(135deg,var(--neon-red),var(--neon-red-light));
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2em;
+  margin:auto;
+  box-shadow:0 0 30px rgba(255,23,68,0.6);
+}
+
+.app-title{
+  margin-top:15px;
+  font-weight:700;
+  color:var(--neon-red);
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+
+.flow-item{
+  background:rgba(255,23,68,0.1);
+  border:1px solid var(--neon-red);
+  padding:10px;
+  text-align:center;
+  border-radius:8px;
+  color:var(--neon-red);
+  font-weight:600;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 24px;
+  border:2px solid var(--neon-red);
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:700;
+  color:var(--neon-red);
+  transition:0.3s;
+}
+
+.btn:hover{
+  background:var(--neon-red);
+  color:#000;
+  box-shadow:0 0 25px rgba(255,23,68,0.7);
+}
+
+footer{
+  margin-top:60px;
+  text-align:center;
+  border-top:2px solid var(--neon-red);
+  padding:30px;
+  color:var(--text-secondary);
+}
+
+@media(max-width:900px){
+  main{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>🤖 Lab08 Gemini Vision AI</h1>
+  <p>ระบบวิเคราะห์ภาพด้วย AI (Image Captioning, Tags, Object Detection & Safety Check)</p>
+</header>
+
+<main>
+
+<section>
+  <div class="card">
+    <h2>📌 เกี่ยวกับแอปพลิเคชัน</h2>
+    <p style="color:var(--text-secondary)">
+      Lab08 เป็นแอปวิเคราะห์ภาพด้วย Gemini Vision AI ผู้ใช้สามารถอัปโหลดภาพหรือถ่ายภาพจากกล้อง
+      จากนั้นระบบจะประมวลผลและแสดงคำบรรยาย (Caption), แท็ก (Tags), วัตถุในภาพ (Objects)
+      และตรวจสอบความปลอดภัยของเนื้อหา
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h2>✨ คุณสมบัติหลัก</h2>
+    <ul class="features-list">
+      <li>อัปโหลดภาพจากเครื่อง</li>
+      <li>ถ่ายภาพจากกล้องมือถือ</li>
+      <li>สร้างคำบรรยายภาพอัตโนมัติ</li>
+      <li>แสดง Tags และ Objects ในภาพ</li>
+      <li>ตรวจสอบความปลอดภัย (Safety Check)</li>
+      <li>UI ธีม Neon Dark Red</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h2>🛠️ เทคโนโลยีที่ใช้</h2>
+    <div class="tech-stack">
+      <span class="tech-badge">Vue 3</span>
+      <span class="tech-badge">TypeScript</span>
+      <span class="tech-badge">Ionic Vue</span>
+      <span class="tech-badge">Gemini API</span>
+      <span class="tech-badge">Composition API</span>
+      <span class="tech-badge">Vite</span>
+    </div>
+
+    <a href="../../apps/lab08_ai" class="btn">🚀 เปิดแอป Lab08</a>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>📲 ตัวอย่างหน้าจอแอป</h2>
+  </div>
+
+  <div class="phone-mockup">
+    <div class="phone-screen">
+      <div>
+        <div class="app-logo">🤖</div>
+        <div class="app-title">Gemini Vision AI</div>
+        <p style="color:var(--text-secondary);margin-top:10px">
+          Upload → Analyze → View Result
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h2>🎯 ลำดับการทำงาน</h2>
+    <div class="flow">
+      <div class="flow-item">1️⃣ Select Image</div>
+      <div class="flow-item">2️⃣ Convert to Base64</div>
+      <div class="flow-item">3️⃣ Send to Gemini</div>
+      <div class="flow-item">4️⃣ AI Processing</div>
+      <div class="flow-item">5️⃣ Display Result</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>🌟 Lab08 Gemini Vision AI - Mobile Web Development</p>
+  <p>Built with ❤️ using Vue 3, Ionic & Gemini AI</p>
+  <p style="opacity:0.7;margin-top:10px">© 2026 | Neon Dark Red Edition</p>
+</footer>
+
+</div>
+</body>
+</html>

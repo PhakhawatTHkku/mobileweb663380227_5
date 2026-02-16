@@ -1,0 +1,7 @@
+{
+  "name": "lab08_ai",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
